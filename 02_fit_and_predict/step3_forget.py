@@ -4,21 +4,25 @@ from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
+LABEL = {1: "churn", 0: "stay"}
+
 df = pd.read_csv("../data/customers.csv")
-X = df[["usage_hours"]]
-y = df["churned"]
+train = df.iloc[:8]
+test = df.iloc[8:]
+X_train, y_train = train[["usage_hours"]], train["churned"]
+X_test, y_test = test[["usage_hours"]], test["churned"]
 
 imputer = SimpleImputer(strategy="median")
 scaler = StandardScaler()
 model = LogisticRegression()
 
-X_filled = imputer.fit_transform(X)
-X_scaled = scaler.fit_transform(X_filled)
-model.fit(X_scaled, y)
+X_train_filled = imputer.fit_transform(X_train)
+X_train_scaled = scaler.fit_transform(X_train_filled)
+model.fit(X_train_scaled, y_train)
 
-new = pd.DataFrame({"usage_hours": [8.0]})
-pred = model.predict(scaler.transform(imputer.transform(new)))
-print("all three steps: 8.0 h ->", "churn" if pred[0] == 1 else "stay")
-
-wrong = model.predict(new.to_numpy())  # new: raw hours straight into the model
-print("forgot two steps: 8.0 h ->", "churn" if wrong[0] == 1 else "stay")  # new
+right = model.predict(scaler.transform(imputer.transform(X_test)))
+wrong = model.predict(X_test.to_numpy())  # new: raw hours straight into the model
+print("hours | all three steps | forgot two steps | actual")  # new
+for hours, r, w, actual in zip(X_test["usage_hours"], right, wrong, y_test):  # new
+    print(hours, "|", LABEL[r], "|", LABEL[w], "|", LABEL[actual])
+print("correct:", (right == y_test).sum(), "of 4 |", (wrong == y_test).sum(), "of 4")  # new

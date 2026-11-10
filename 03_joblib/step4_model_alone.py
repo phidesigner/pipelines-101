@@ -12,8 +12,11 @@ pipe = joblib.load(path)
 model_only = Path("models/model_only.joblib")  # new
 joblib.dump(pipe.named_steps["model"], model_only)  # new: the last step alone, no fill, no scale
 
-new = pd.DataFrame({"usage_hours": [8.0]})
-right = pipe.predict(new)
-wrong = joblib.load(model_only).predict(new.to_numpy())  # new: raw hours, nothing to prepare them
-print("whole pipeline: 8.0 h ->", "churn" if right[0] == 1 else "stay")
-print("model alone: 8.0 h ->", "churn" if wrong[0] == 1 else "stay")  # new
+df = pd.read_csv("../data/customers.csv")
+test = df.iloc[8:]
+X_test, y_test = test[["usage_hours"]], test["churned"]
+
+right = pipe.predict(X_test)
+wrong = joblib.load(model_only).predict(X_test.to_numpy())  # new: raw hours
+print("whole pipeline:", (right == y_test).sum(), "of 4 test rows right")
+print("model alone:", (wrong == y_test).sum(), "of 4 test rows right")  # new

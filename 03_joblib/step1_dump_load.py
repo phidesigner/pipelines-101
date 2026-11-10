@@ -6,8 +6,10 @@ import pandas as pd
 from sklearn.impute import SimpleImputer
 
 df = pd.read_csv("../data/customers.csv")
+train = df.iloc[:8]  # same split as before: fit on training rows only
+
 imputer = SimpleImputer(strategy="median")
-imputer.fit(df[["usage_hours"]])
+imputer.fit(train[["usage_hours"]])
 print("before saving, median:", imputer.statistics_)
 
 path = Path("models/imputer.joblib")  # new

@@ -4,18 +4,22 @@ from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression  # new
 from sklearn.preprocessing import StandardScaler
 
+LABEL = {1: "churn", 0: "stay"}  # new
+
 df = pd.read_csv("../data/customers.csv")
-X = df[["usage_hours"]]
-y = df["churned"]  # new: 1 = churned, 0 = stayed
+train = df.iloc[:8]
+test = df.iloc[8:]
+X_train, y_train = train[["usage_hours"]], train["churned"]  # new: y, 1 = churned, 0 = stayed
+X_test, y_test = test[["usage_hours"]], test["churned"]  # new
 
 imputer = SimpleImputer(strategy="median")
 scaler = StandardScaler()
 model = LogisticRegression()  # new
 
-X_filled = imputer.fit_transform(X)
-X_scaled = scaler.fit_transform(X_filled)
-model.fit(X_scaled, y)  # new: learns the weights
+X_train_filled = imputer.fit_transform(X_train)
+X_train_scaled = scaler.fit_transform(X_train_filled)
+model.fit(X_train_scaled, y_train)  # new: learns the weights, training rows only
 
-new = pd.DataFrame({"usage_hours": [8.0]})
-pred = model.predict(scaler.transform(imputer.transform(new)))  # new: fill, scale, predict
-print("all three steps: 8.0 h ->", "churn" if pred[0] == 1 else "stay")
+pred = model.predict(scaler.transform(imputer.transform(X_test)))  # new: fill, scale, predict
+for hours, p, actual in zip(X_test["usage_hours"], pred, y_test):  # new
+    print(hours, "h ->", LABEL[p], "| actual:", LABEL[actual])

@@ -2,14 +2,14 @@
 
 Tiny Python files, run before the pipeline slides of Sessions 9-11. They build, from zero, the demo on slide `s911-demo-pipeline`
 
-Every folder uses the same example as the best-practices 101: a customer used the product **8.0 hours**. This time a model learns churn from `data/customers.csv`, 12 synthetic customers; customer 5 has no hours recorded
+A model learns churn from usage hours in `data/customers.csv`, 12 synthetic customers; customer 5 has no hours recorded. From `01_stateless_stateful` step 3 onwards the split never changes: the first 8 customers train, the last 4 test. Every `fit` sees training rows only
 Each step adds one small change to the previous step, marked `# new`
 
 | Run before | Folder | The example grows from |
 | --- | --- | --- |
 | Stateless or stateful: split first | `01_stateless_stateful` | A fixed rule > a learned median > learned before or after the split > `fit` and `transform` |
-| One Pipeline, two calls | `02_fit_and_predict` | Fill and scale by hand > add the model > forget two steps > one `Pipeline` |
-| Inside the .joblib file, then the demo | `03_joblib` | Save one object > save the pipeline > load it in a separate script > the model-alone trap > look inside |
+| One Pipeline, two calls | `02_fit_and_predict` | Fill and scale by hand > add the model > forget two steps (4 of 4 right becomes 2 of 4) > one `Pipeline` |
+| Inside the .joblib file, then the demo | `03_joblib` | Save one object > save the pipeline > load it in a separate script and predict the test rows > the model-alone trap > look inside |
 
 Each folder has a `STEPS.md` (what to run, what to expect, what to say)
 
