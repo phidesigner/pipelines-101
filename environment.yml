@@ -1,0 +1,8 @@
+name: pipeline-101
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pandas
+  - scikit-learn   # SimpleImputer, StandardScaler, LogisticRegression, Pipeline
+  - joblib         # save and load the fitted pipeline
