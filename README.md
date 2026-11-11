@@ -10,6 +10,7 @@ Each step adds one small change to the previous step, marked `# new`
 | Stateless or stateful: split first | `01_stateless_stateful` | A fixed rule > a learned median > learned before or after the split > `fit` and `transform` |
 | One Pipeline, two calls | `02_fit_and_predict` | Fill and scale by hand > add the model > forget two steps (4 of 4 right becomes 2 of 4) > one `Pipeline` |
 | Inside the .joblib file, then the demo | `03_joblib` | Save one object > save the pipeline > load it in a separate script and predict the test rows > the model-alone trap > look inside |
+| Train, validation and test | `04_train_val_test` | Choose on the test set > choose on validation, test once > k-fold > k-fold with a step fitted outside the folds |
 
 Each folder has a `STEPS.md` (what to run, what to expect, what to say)
 
