@@ -10,9 +10,9 @@ y = rng.integers(0, 2, size=2000)  # churn is a coin flip: nothing to learn, tru
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.20, random_state=42, stratify=y)  # 80% train, 20% test
 
-ideas = [np.random.default_rng(1000 + i).choice(50, 5, replace=False) for i in range(50)]
+feature_sets = [np.random.default_rng(1000 + i).choice(50, 5, replace=False) for i in range(50)]
 scores = []
-for cols in ideas:  # 50 ideas: each uses 5 of the 50 columns
+for cols in feature_sets:  # train 50 models, each using a different set of 5 input features
     model = LogisticRegression().fit(X_train[:, cols], y_train)
     scores.append(model.score(X_test[:, cols], y_test))  # we look at the test set every time
 
